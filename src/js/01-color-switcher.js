@@ -18,8 +18,10 @@ let timerId = null;
 refs.btnStop.setAttribute('disabled', true);
 
 function onShowColor() {
-    refs.btnStop.setAttribute('disabled', false);
-    refs.btnStart.setAttribute('disabled', true);
+    // refs.btnStop.setAttribute('disabled', false);
+    // refs.btnStart.setAttribute('disabled', true);
+    refs.btnStop.disabled = false;
+    refs.btnStart.disabled = true;
 
     timerId = setInterval(() => {
 
