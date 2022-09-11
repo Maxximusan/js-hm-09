@@ -22,7 +22,7 @@ function onShowColor() {
     refs.btnStart.setAttribute('disabled', true);
 
     timerId = setInterval(() => {
-        randomColor = getRandomHexColor();
+        let randomColor = getRandomHexColor();
         refs.ourBody.style.background = randomColor;
     }, 1000);
 };
