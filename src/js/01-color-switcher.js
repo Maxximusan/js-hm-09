@@ -24,8 +24,8 @@ function onShowColor() {
     refs.btnStart.disabled = true;
 
     timerId = setInterval(() => {
-
-        refs.ourBody.style.background = getRandomHexColor();
+        let randomColor = getRandomHexColor()
+        refs.ourBody.style.background = randomColor;
     }, 1000);
 };
 
