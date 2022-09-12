@@ -4,7 +4,7 @@ import "flatpickr/dist/flatpickr.min.css";
 const refs = {
     // пока не знаю зачем так дохрена
     btnStart: document.querySelector('[data-start]'),
-    // clockFace: document.querySelector('#datetime-picker'),
+    clockFace: document.querySelector('#datetime-picker'),
     days: document.querySelector('[data-days]'),
     hours: document.querySelector('[data-hours]'),
     minutes: document.querySelector('[data-minutes]'),
@@ -15,15 +15,19 @@ refs.btnStart.addEventListener('click', onCounterStart);
 
 refs.btnStart.disabled = true;
 
+let intervalId = null;
+let ourTimeCounter = 0;
+
 // клик и старт таймера
 function onCounterStart() {
 
     refs.btnStart.disabled = true;
+    refs.clockFace.disabled = true;
     // время старта
     // const startTime = Date.now()
 
     // запускаем интервал
-    setInterval(() => {
+    intervalId = setInterval(() => {
         // текущее время на момент вызова функции
         const currentTime = Date.now();
 
@@ -31,13 +35,21 @@ function onCounterStart() {
         const deltaTime = selectDates - currentTime;
 
         // обратный отсчет в мат.функцию даты\времени
-        const ourTimeCounter = convertMs(deltaTime);
+        ourTimeCounter = convertMs(deltaTime);
+
+        const { days, hours, minutes, seconds } = ourTimeCounter;
+        let sumDateValue = Number(days + hours + minutes + seconds);
+        if (sumDateValue === 0) {
+            clearInterval(intervalId);
+        }
 
         // ЗАРАБОТАЛО ХОТЬ :)))
         updateClockFace(ourTimeCounter)
         // console.log(ourTimeCounter)
-        // console.log(updateClockFace)
+        console.log(sumDateValue)
     }, 1000);
+
+
 };
 
 
@@ -54,6 +66,7 @@ function updateClockFace({ days, hours, minutes, seconds }) {
 // куда это после опшина? - в с четчик ёпта)
 let selectDates = 0;
 // выбор пользователем даты\времени без прошлых дат\времени
+
 const options = {
     enableTime: true,
     time_24hr: true,
@@ -75,8 +88,8 @@ const options = {
 flatpickr('#datetime-picker', options)
 
 
-// добавляю двухзначные числа с нулем
-function pad(value) {
+// добавляю двухзначные числа с нулем 
+function addLeadingZero(value) {
     return String(value).padStart(2, '0');
 }
 
@@ -90,13 +103,13 @@ function convertMs(ms) {
     const day = hour * 24;
 
     // Remaining days
-    const days = pad(Math.floor(ms / day));
+    const days = addLeadingZero(Math.floor(ms / day));
     // Remaining hours
-    const hours = pad(Math.floor((ms % day) / hour));
+    const hours = addLeadingZero(Math.floor((ms % day) / hour));
     // Remaining minutes
-    const minutes = pad(Math.floor(((ms % day) % hour) / minute));
+    const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
     // Remaining seconds
-    const seconds = pad(Math.floor((((ms % day) % hour) % minute) / second));
+    const seconds = addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
 
     return { days, hours, minutes, seconds };
 }
